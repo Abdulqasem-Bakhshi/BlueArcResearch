@@ -1,0 +1,161 @@
+/* Full-height layout */
+html, body {
+    margin: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #0a1628;
+    color: #d4dae3;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content area */
+.container {
+    flex: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.logo {
+    width: 320px; /* adjust as needed */
+    height: auto;
+    margin-bottom: 30px;
+    transition: opacity 0.4s ease;
+}
+
+.logo:hover {
+    opacity: 0.6;
+}
+
+/* Small aligned trademark */
+.tm {
+    font-size: 14px;
+    vertical-align: super;
+    margin-left: 3px;
+}
+
+/* Intro text */
+.description {
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto 60px;
+}
+
+/* Document links */
+.docs {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.doc-link {
+    padding: 14px 28px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #506e9a;
+    color: #ffffff;
+    transition: 0.3s ease;
+    white-space: nowrap;
+}
+
+.doc-link:hover {
+    background-color: #a6cbf5;
+    color: #0a1628;
+}
+
+.about {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 26px;
+    margin-bottom: 15px;
+    color: #a6cbf5;
+    text-transform: none;
+}
+
+.about p {
+    font-size: 17px;
+    max-width: 750px;
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* Footer always at bottom */
+footer {
+    text-align: center;
+    padding: 25px 0;
+    font-size: 14px;
+    opacity: 0.6;
+    width: 100%;
+}
+
+/* Mobile Responsive Adjustments */
+/* Mobile Responsive Adjustments */
+@media (max-width: 700px) {
+
+    .container {
+        padding: 60px 16px;
+    }
+
+    .logo {
+        width: 220px;
+        margin-bottom: 24px;
+    }
+
+    .description {
+        font-size: 16px;
+        margin-bottom: 40px;
+        padding: 0 10px;
+    }
+
+    .docs {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .doc-link {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 12px 22px;
+    }
+
+    .about {
+        margin-top: 40px;
+        padding: 0 10px;
+    }
+
+    .about h2 {
+        font-size: 22px;
+        margin-bottom: 12px;
+    }
+
+    .about p {
+        font-size: 15px;
+        line-height: 1.55;
+    }
+
+    footer {
+        font-size: 12px;
+        padding: 20px 10px;
+    }
+}
