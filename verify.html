@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification | Blue Arc Capital™</title>
+    <style>
+        body {
+            background-color: #0a1628;
+            color: #d4dae3;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 260px;
+            border-radius: 6px;
+            border: none;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #506e9a;
+            border: none;
+            color: #ffffff;
+            font-size: 16px;
+            border-radius: 6px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #a6cbf5;
+            color: #0a1628;
+        }
+
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .valid {
+            color: #a6cbf5;
+            font-weight: bold;
+        }
+
+        .invalid {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .hash {
+            font-family: monospace;
+            word-break: break-all;
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .verification-box {
+            background: #112238;
+            border: 1px solid #506e9a;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 25px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .verification-box p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .verification-title {
+            font-size: 30px;
+            color: #a6cbf5;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .valid-status {
+            color: #4df078;
+            font-weight: bold;
+        }
+
+        .invalid-status {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .hash-value {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .hash-value:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 class="verification-title">Blue Arc Capital™ Verification System</h1>
+    <p>Enter the certificate ID printed on the document.</p>
+
+    <input type="text" id="cidInput" placeholder="e.g. BAC-FDR-2025-001">
+    <button onclick="verifyCID()">Verify</button>
+
+    <div id="result"></div>
+    <canvas id="qrCode" style="display:none; margin: 10px auto;"></canvas>
+
+    <script>
+        const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLnLVNlbjIUMVzsovKF3f86V04zyNLyylFy5cfF7CWFEM5QcqVz-7Wo9UF59ehcV-NQQ_YnL7uMw4m/pub?gid=0&single=true&output=csv";
+
+        async function verifyCID() {
+            const cid = document.getElementById("cidInput").value.trim();
+            const resultDiv = document.getElementById("result");
+
+            if (!cid) return;
+
+            resultDiv.innerHTML = "Checking…";
+
+            try {
+                const response = await fetch(sheetURL);
+                const text = await response.text();
+
+                const rows = text.split("\n").map(r => r.split(","));
+                const header = rows[0];
+                const cidIndex = header.indexOf("CID");
+
+                let matchRow = rows.find(row => row[cidIndex] === cid);
+
+                if (matchRow) {
+                    const role = matchRow[header.indexOf("Role")];
+                    const holder = matchRow[header.indexOf("Issued To")];
+                    const year = matchRow[header.indexOf("Year")];
+                    const status = matchRow[header.indexOf("Status")];
+                    const sha1 = matchRow[header.indexOf("SHA-1")];
+
+                    const roleNames = {
+                        "FDR": "Founder",
+                        "MBR": "Member"
+                    };
+
+                    const displayRole = roleNames[role] || role;
+
+                    resultDiv.innerHTML = `
+                        <div class="verification-box">
+                            <p><strong>Certificate ID:</strong> ${cid}</p>
+                            <p><strong>Holder:</strong> ${holder}</p>
+                            <p><strong>Role:</strong> ${displayRole}</p>
+                            <p><strong>Year Issued:</strong> ${year}</p>
+                            <p><strong>SHA-1:</strong> <span class="hash-value" onclick="copyHash('${sha1}')">${sha1}</span></p>
+                            <p><strong>Status:</strong> <span class="valid-status">Authentic</span></p>
+                        </div>
+                    `;
+                    generateQR(cid);
+                } else {
+                    resultDiv.innerHTML = `<p class="invalid">INVALID ❌<br>Certificate ID not found.</p>`;
+                    document.getElementById("qrCode").style.display = "none";
+                }
+
+            } catch (err) {
+                resultDiv.innerHTML = `<p class="invalid">Error checking verification system.</p>`;
+            }
+        }
+
+        // Auto-fill if ?cid=BAC-XXXX in link
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramCID = urlParams.get("cid");
+        if (paramCID) {
+            document.getElementById("cidInput").value = paramCID;
+            verifyCID();
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script>
+        function generateQR(cid) {
+            const qrCanvas = document.getElementById("qrCode");
+
+            qrCanvas.width = qrCanvas.width;
+            qrCanvas.style.display = "block";
+
+            new QRious({
+                element: qrCanvas,
+                value: `https://abdulqasem-bakhshi.github.io/BlueArcCapital/verify.html?cid=${cid}`,
+                size: 160
+            });
+        }
+    </script>
+
+    <script>
+        function copyHash(hash) {
+        navigator.clipboard.writeText(hash).then(() => {
+        alert("SHA-512 hash copied to clipboard!");
+        });
+        }
+    </script>
+
+</body>
+
+</html>
