@@ -1,4 +1,4 @@
-/* Full-height layout */
+/* ...existing code... */
 html, body {
     margin: 0;
     height: 100%;
@@ -116,6 +116,12 @@ footer {
         padding: 60px 16px;
     }
 
+    /* reduce header size for phones */
+    h1 {
+        font-size: 32px;
+        margin-bottom: 14px;
+    }
+
     .logo {
         width: 220px;
         margin-bottom: 24px;
@@ -127,16 +133,24 @@ footer {
         padding: 0 10px;
     }
 
+    /* stack links but keep buttons sized to content */
     .docs {
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
+        align-items: center;
     }
 
     .doc-link {
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-        padding: 12px 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;           /* don't force full width */
+        min-width: 160px;      /* keeps tap target reasonable */
+        max-width: 360px;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 12px 18px;
+        white-space: normal;
     }
 
     .about {
@@ -159,3 +173,22 @@ footer {
         padding: 20px 10px;
     }
 }
+
+/* Extra small screens - tighten spacing like verify.html */
+@media (max-width: 480px) {
+    .container { padding: 40px 12px; }
+    h1 { font-size: 24px; }
+    .logo { width: 180px; }
+    .description { font-size: 15px; margin-bottom: 28px; }
+
+    .doc-link {
+        min-width: 140px;
+        max-width: 92%;
+        padding: 10px 14px;
+    }
+
+    .about { margin-top: 28px; padding: 0 8px; }
+    .about p { font-size: 14px; }
+    footer { padding: 16px 8px; font-size: 12px; }
+}
+/* ...existing code... */

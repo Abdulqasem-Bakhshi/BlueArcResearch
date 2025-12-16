@@ -5,22 +5,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate Verification | Blue Arc Capital™</title>
+<!-- ...existing code... -->
     <style>
         body {
             background-color: #0a1628;
             color: #d4dae3;
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 40px 20px;
+            padding: 24px 12px;
+            box-sizing: border-box;
+        }
+
+        /* layout for input + button */
+        .form-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         input {
             padding: 10px;
-            width: 260px;
+            width: 100%;
+            max-width: 320px;
+            flex: 1 1 220px;
             border-radius: 6px;
             border: none;
             margin-top: 20px;
             font-size: 16px;
+            box-sizing: border-box;
         }
 
         button {
@@ -30,9 +46,10 @@
             color: #ffffff;
             font-size: 16px;
             border-radius: 6px;
-            margin-left: 10px;
+            margin-left: 0;
             cursor: pointer;
             transition: 0.3s ease;
+            flex: 0 0 auto;
         }
 
         button:hover {
@@ -41,9 +58,11 @@
         }
 
         #result {
-            margin-top: 30px;
+            margin-top: 18px;
             font-size: 18px;
             line-height: 1.6;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .valid {
@@ -61,27 +80,31 @@
             word-break: break-all;
             font-size: 14px;
             opacity: 0.85;
+            overflow-wrap: anywhere;
         }
 
         .verification-box {
             background: #112238;
             border: 1px solid #506e9a;
             border-radius: 10px;
-            padding: 25px;
-            margin-top: 25px;
+            padding: 20px;
+            margin-top: 18px;
             text-align: left;
             max-width: 600px;
+            width: 100%;
             margin-left: auto;
             margin-right: auto;
+            box-sizing: border-box;
+            word-break: break-word;
         }
 
         .verification-box p {
             font-size: 16px;
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
         .verification-title {
-            font-size: 30px;
+            font-size: 28px;
             color: #a6cbf5;
             margin-bottom: 10px;
             font-weight: bold;
@@ -100,12 +123,36 @@
         .hash-value {
             cursor: pointer;
             text-decoration: underline;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            display: inline-block;
+            max-width: 100%;
         }
 
         .hash-value:hover {
             opacity: 0.7;
         }
+
+        /* QR canvas sizing */
+        #qrCode {
+            display: none;
+            margin: 10px auto;
+            width: 100%;
+            max-width: 160px;
+            height: auto;
+        }
+
+        /* Small screens: stack input and button */
+        @media (max-width: 480px) {
+            .verification-title { font-size: 22px; }
+            input { font-size: 15px; max-width: 100%; margin-top: 12px; }
+            button { width: 100%; padding: 12px; margin-top: 8px; }
+            .form-row { flex-direction: column; align-items: stretch; gap: 8px; }
+            .verification-box { padding: 16px; }
+            #result { font-size: 16px; }
+        }
     </style>
+<!-- ...existing code... -->
 </head>
 
 <body>
