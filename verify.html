@@ -160,7 +160,7 @@
     <h1 class="verification-title">Blue Arc Research™ Verification System</h1>
     <p>Enter the certificate ID printed on the document.</p>
 
-    <input type="text" id="cidInput" placeholder="e.g. BAR-FDR-2025-001">
+    <input type="text" id="cidInput" placeholder="e.g. BAR-FDR-2025-001" style="text-transform: uppercase;">
     <button onclick="verifyCID()">Verify</button>
 
     <div id="result"></div>
@@ -170,7 +170,8 @@
         const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLnLVNlbjIUMVzsovKF3f86V04zyNLyylFy5cfF7CWFEM5QcqVz-7Wo9UF59ehcV-NQQ_YnL7uMw4m/pub?gid=0&single=true&output=csv";
 
         async function verifyCID() {
-            const cid = document.getElementById("cidInput").value.trim();
+            const input = document.getElementById("cidInput");
+            const cid = input.value.trim().toUpperCase();
             const resultDiv = document.getElementById("result");
 
             if (!cid) return;
@@ -185,7 +186,7 @@
                 const header = rows[0];
                 const cidIndex = header.indexOf("CID");
 
-                let matchRow = rows.find(row => row[cidIndex] === cid);
+                let matchRow = rows.find(row => row[cidIndex]?.trim().toUpperCase() === cid);
 
                 if (matchRow) {
                     const role = matchRow[header.indexOf("Role")];
